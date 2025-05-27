@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Calculadora</title>
+</head>
+<body>
+  <h1>Calculadora con Backend</h1>
+  <input type="number" id="num1" placeholder="Número 1" />
+  <select id="operacion">
+    <option value="sumar">+</option>
+    <option value="restar">-</option>
+    <option value="multiplicar">*</option>
+    <option value="dividir">/</option>
+  </select>
+  <input type="number" id="num2" placeholder="Número 2" />
+  <button onclick="calcular()">Calcular</button>
+  <p>Resultado: <span id="resultado"></span></p>
+
+  <script>
+    async function calcular() {
+      const num1 = parseFloat(document.getElementById("num1").value);
+      const num2 = parseFloat(document.getElementById("num2").value);
+      const operacion = document.getElementById("operacion").value;
+
+      const res = await fetch("http://ec2-100-27-211-46.compute-1.amazonaws.com:3000/calcular", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ num1, num2, operacion }),
+      });
+
+      const data = await res.json();
+      document.getElementById("resultado").innerText = data.resultado ?? data.error;
+    }
+  </script>
+</body>
+</html>
